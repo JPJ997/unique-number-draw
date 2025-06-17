@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unique Number Draw</title>
+  <style>
+    body { font-family: sans-serif; max-width: 500px; margin: auto; padding: 20px; }
+    h1 { text-align: center; }
+    input, button { width: 100%; padding: 10px; margin-top: 10px; }
+    ul { list-style: none; padding: 0; }
+    li { padding: 6px; border-bottom: 1px solid #ccc; }
+    .result { font-weight: bold; margin-top: 20px; text-align: center; font-size: 1.5em; }
+  </style>
+</head>
+<body>
+  <h1>Get Your Unique Number</h1>
+  <input type="text" id="nameInput" placeholder="Enter your name" />
+  <button onclick="assignNumber()">Get My Number</button>
+
+  <div class="result" id="result"></div>
+
+  <h2>Assigned Numbers</h2>
+  <ul id="assignedList"></ul>
+
+  <script>
+    const availableNumbers = [1,2,3,4,5,8,9,11,12,13,14,15,16,17,18,19,21,23,24,25];
+    const assignments = [];
+
+    function assignNumber() {
+      const name = document.getElementById("nameInput").value.trim();
+      if (!name) {
+        alert("Please enter your name.");
+        return;
+      }
+
+      const existing = assignments.find(entry => entry.name.toLowerCase() === name.toLowerCase());
+      if (existing) {
+        document.getElementById("result").innerText = `Hi ${existing.name}, your number is ${existing.number}`;
+        return;
+      }
+
+      if (availableNumbers.length === 0) {
+        alert("All numbers have been assigned.");
+        return;
+      }
+
+      const index = Math.floor(Math.random() * availableNumbers.length);
+      const number = availableNumbers.splice(index, 1)[0];
+      assignments.push({ name, number });
+      document.getElementById("result").innerText = `Hi ${name}, your number is ${number}`;
+      updateAssignedList();
+    }
+
+    function updateAssignedList() {
+      const ul = document.getElementById("assignedList");
+      ul.innerHTML = "";
+      assignments.forEach(entry => {
+        const li = document.createElement("li");
+        li.innerText = `${entry.name}: ${entry.number}`;
+        ul.appendChild(li);
+      });
+    }
+  </script>
+</body>
+</html>
